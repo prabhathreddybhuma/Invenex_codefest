@@ -1,6 +1,6 @@
 // Configuration for API endpoints
 const API_ENDPOINTS = {
-    INVENTORY_COUNT: '/api/inventory/count',
+    INVENTORY_COUNT: '/api/total-inventory',
     INVENTORY_VALUE: '/api/inventory/value',
     TURNOVER_RATE: '/api/inventory/turnover',
     WAREHOUSE_UTILIZATION: '/api/warehouse/utilization',
