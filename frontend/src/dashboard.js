@@ -6,11 +6,12 @@ import {
 import './App.css'
 // API Configuration
 const API_ENDPOINTS = {
-  INVENTORY_COUNT: '/api/inventory/count',
-  WAREHOUSE_UTILIZATION: '/api/warehouse/utilization',
-  WAREHOUSE_OVERVIEW: '/api/warehouse/overview',
-  STOCK_ALERTS: '/api/stock/alerts'
+  TOTAL_INVENTORY: 'http://localhost:3000/api/total-inventory',
+  OVERALL_UTILISATION: 'http://localhost:3000/api/overall-utilization',
+   WAREHOUSE_UTILISATION: 'http://localhost:3000/api/warehouse-utilization',
+   WAREHOUSE_STOCK: 'http://localhost:3000/api/warehouse-stock',
 };
+
 
 // Base Card Components
 const Card = ({ children, className = '' }) => (
@@ -79,11 +80,32 @@ const Dashboard = () => {
 
 const Sidebar = () => {
   const menuItems = [
-    { icon: LayoutDashboard, text: 'Dashboard', active: true },
-    { icon: Warehouse, text: 'Warehouse Management' },
-    { icon: Package, text: 'Inventory' },
-    { icon: FileText, text: 'Analytics & Reports' },
-    { icon: Truck, text: 'Orders & Delivery' }
+    { 
+      icon: LayoutDashboard, 
+      text: 'Dashboard', 
+      link: '/',
+      active: true 
+    },
+    { 
+      icon: Warehouse, 
+      text: 'Warehouse Management', 
+      link: '/warehouse'
+    },
+    { 
+      icon: Package, 
+      text: 'Inventory', 
+      link: '/inventory'
+    },
+    { 
+      icon: FileText, 
+      text: 'Demand Forecast', 
+      link: '/forecast'
+    },
+    { 
+      icon: Truck, 
+      text: 'Inventory Optimisation', 
+      link: '/optimise'
+    }
   ];
 
   return (
@@ -95,7 +117,7 @@ const Sidebar = () => {
           {menuItems.map((item, index) => (
             <a
               key={index}
-              href="#"
+              href={item.link}
               className={`nav-item ${item.active ? 'active' : ''}`}
             >
               <item.icon size={20} />
@@ -105,11 +127,11 @@ const Sidebar = () => {
         </nav>
 
         <div className="bottom-menu">
-          <a href="#" className="nav-item">
+          <a href="/settings" className="nav-item">
             <Settings size={20} />
             <span>Settings</span>
           </a>
-          <a href="#" className="nav-item">
+          <a href="/help" className="nav-item">
             <HelpCircle size={20} />
             <span>Info</span>
           </a>
@@ -202,21 +224,21 @@ const AlertCard = ({ severity, message, timestamp }) => {
 };
 
 const MetricsGrid = () => {
-  const { data: inventoryData, loading: inventoryLoading } = useDataFetching(API_ENDPOINTS.INVENTORY_COUNT);
-  const { data: utilizationData, loading: utilizationLoading } = useDataFetching(API_ENDPOINTS.WAREHOUSE_UTILIZATION);
+  const { data: inventoryData, loading: inventoryLoading } = useDataFetching(API_ENDPOINTS.TOTAL_INVENTORY);
+  const { data: utilizationData, loading: utilizationLoading } = useDataFetching(API_ENDPOINTS.OVERALL_UTILISATION);
 
   return (
     <div className="metrics-grid">
       <MetricCard
         title="Inventory Count"
-        value={inventoryLoading ? 'Loading...' : (inventoryData?.count || 'N/A')}
+        value={inventoryLoading ? 'Loading...' : (inventoryData?.total_inventory || 'N/A')}
         subtitle="Total Units"
         trend={inventoryData?.trend}
         icon={Package}
       />
       <MetricCard
         title="Warehouse Utilization"
-        value={utilizationLoading ? 'Loading...' : (utilizationData?.percentage ? `${utilizationData.percentage}%` : 'N/A')}
+        value={utilizationLoading ? 'Loading...' : (utilizationData?.overall_utilization_percentage || 'N/A')}
         subtitle="Capacity Used"
         trend={utilizationData?.trend}
         icon={Warehouse}
@@ -258,8 +280,22 @@ const MetricCard = ({ title, value, subtitle, trend, icon: Icon }) => {
 };
 
 const WarehouseOverview = () => {
-  const { data: warehouseData, loading } = useDataFetching(API_ENDPOINTS.WAREHOUSE_OVERVIEW);
-  const warehouses = loading ? Array(7).fill({}) : (warehouseData || Array(7).fill({}));
+  const { data: warehouseUtilData, loading } = useDataFetching(API_ENDPOINTS.WAREHOUSE_UTILISATION);
+  const { data: warehouseStockData, loading: stockLoading } = useDataFetching(API_ENDPOINTS.WAREHOUSE_STOCK);
+  
+  // Correct extraction from warehouseStockData
+  const warehouseStock = warehouseStockData?.warehouse_stock || [];
+  const warehouseUtilization = warehouseUtilData?.warehouse_utilization || [];
+
+  const warehouses = [
+    { id: "WIND01" },
+    { id: "WIND02" },
+    { id: "WIND03" },
+    { id: "WIND04" },
+    { id: "WIND05" },
+    { id: "WIND06" },
+    { id: "WIND07" }
+  ];
 
   return (
     <Card>
@@ -268,48 +304,50 @@ const WarehouseOverview = () => {
       </CardHeader>
       <CardContent>
         <div className="warehouse-grid">
-          {warehouses.map((warehouse, index) => (
-            <WarehouseCard
-              key={index}
-              id={index + 1}
-              totalStock={warehouse.totalStock}
-              capacityUtilization={warehouse.capacityUtilization}
-              loading={loading}
-            />
-          ))}
+          {warehouses.map((warehouse) => {
+            // Find the utilization data for this warehouse.
+            const utilization = warehouseUtilization.find(w => w.warehouse_id === warehouse.id);
+            // Find the stock data for this warehouse.
+            const stockEntry = warehouseStock.find(item => item._id === warehouse.id);
+            return (
+              <WarehouseCard
+                key={warehouse.id}
+                id={warehouse.id}
+                totalStock={loading || stockLoading ? "Loading..." : stockEntry?.total_stock || "N/A"}
+                capacityUtilization={loading ? "Loading..." : utilization?.utilization_percentage || "N/A"}
+                loading={loading || stockLoading}
+              />
+            );
+          })}
         </div>
       </CardContent>
     </Card>
   );
 };
 
+
+
 const WarehouseCard = ({ id, totalStock, capacityUtilization, loading }) => {
   return (
     <div className="warehouse-card">
       <div className="warehouse-header">
-        <h3 className="warehouse-title">Warehouse {id}</h3>
-        <span className="warehouse-id">
-          {loading ? 'N/A' : (totalStock ? `WH${id}` : 'N/A')}
-        </span>
+        <h3 className="warehouse-title">{id}</h3>
+      
       </div>
       
       <div className="warehouse-stats">
         <div className="stat-item">
           <span className="stat-label">Total Stock</span>
-          <div className="stat-value">
-            {loading ? 'N/A' : (totalStock ? `${totalStock.toLocaleString()} units` : 'N/A units')}
-          </div>
+          <div className="stat-value">{loading ? 'N/A' : totalStock}</div>
         </div>
         
         <div className="stat-item">
           <span className="stat-label">Capacity Utilization</span>
-          <div className="stat-value">
-            {loading ? 'N/A' : (capacityUtilization ? `${capacityUtilization}%` : 'N/A%')}
-          </div>
+          <div className="stat-value">{loading ? 'N/A' : capacityUtilization}</div>
           <div className="progress-bar">
             <div
               className="progress-bar-fill"
-              style={{ width: `${loading ? 0 : (capacityUtilization || 0)}%` }}
+              style={{ width: `${loading ? 0 : parseFloat(capacityUtilization) || 0}%` }}
             />
           </div>
         </div>
