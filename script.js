@@ -186,13 +186,7 @@ function getAlertIcon(severity) {
 function initializeMongoChart() {
     const chartContainer = document.getElementById('salesChart');
     chartContainer.innerHTML = `
-        <iframe 
-            style="background: #21313C;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" 
-            width="100%" 
-            height="100%" 
-            src="https://charts.mongodb.com/charts-invenx-vtwdbcs/embed/charts?id=7036e90a-2d80-4d47-b7e3-d6ac9f3561f3&maxDataAge=300&theme=dark&autoRefresh=true">
-        </iframe>
-    `;
+       <iframe style="background: #21313C;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="900" height="480" src="https://charts.mongodb.com/charts-invenx-vtwdbcs/embed/charts?id=50c65100-6dd5-4b9a-b21a-38a9e9f29dcf&maxDataAge=3600&theme=dark&autoRefresh=true"></iframe>  `;
 }
 
 // Update header date and time
