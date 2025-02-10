@@ -1,38 +1,458 @@
-.App {
-  text-align: center;
+ /* Reset and base styles */
+ * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root {
+  --background-dark: #121212;
+  --background-card: #1E1E1E;
+  --background-input: #2A2A2A;
+  --border-color: rgba(75, 85, 99, 0.5);
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --blue-primary: #3b82f6;
+  --green-primary: #22c55e;
+  --red-primary: #ef4444;
+  --yellow-primary: #eab308;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--text-primary);
+  background-color: var(--background-dark);
 }
 
-.App-header {
-  background-color: #282c34;
+/* Layout */
+.dashboard {
+  display: flex;
   min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 16rem;
+}
+
+.main-container {
+  padding: 1.5rem;
+}
+
+.content-grid {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card Components */
+.card {
+  background-color: var(--background-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(75, 85, 99, 0.7);
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  width: 16rem;
+  height: 100%;
+  background-color: var(--background-card);
+  border-right: 1px solid var(--border-color);
+}
+
+.sidebar-container {
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--blue-primary);
+  margin-bottom: 2rem;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bottom-menu {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.App-link {
-  color: #61dafb;
+.nav-item:hover {
+  background-color: rgba(75, 85, 99, 0.2);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.nav-item.active {
+  background-color: var(--blue-primary);
+  color: var(--text-primary);
 }
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  width: 24rem;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  background-color: var(--background-input);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+}
+
+.search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+  }
+
+  .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+  }
+
+  .notification-button {
+      position: relative;
+      padding: 0.5rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+  }
+
+  .notification-button:hover {
+      background-color: rgba(75, 85, 99, 0.2);
+  }
+
+  .notification-dot {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: var(--blue-primary);
+      border-radius: 50%;
+  }
+
+  .date-display {
+      padding: 0.5rem 1rem;
+      background-color: var(--background-input);
+      border-radius: 0.5rem;
+      color: var(--text-secondary);
+  }
+
+  /* Stock Overview Grid */
+  .stock-overview-grid {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 1.5rem;
+  }
+
+  .chart-container {
+      height: 480px;
+  }
+
+  .chart-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 0.5rem;
+      background: #21313C;
+      box-shadow: 0 2px 10px 0 rgba(70, 76, 79, 0.2);
+  }
+
+  .alerts-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  }
+
+  .loading-skeleton {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  }
+
+  .skeleton-item {
+      height: 5rem;
+      background-color: var(--background-input);
+      border-radius: 0.5rem;
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .no-alerts {
+      color: var(--text-secondary);
+  }
+
+  /* Alert Cards */
+  .alert-card {
+      padding: 1rem;
+      border-radius: 0.5rem;
+  }
+
+  .alert-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+  }
+
+  .alert-message {
+      flex: 1;
+  }
+
+  .alert-timestamp {
+      font-size: 0.875rem;
+      opacity: 0.75;
+      margin-top: 0.25rem;
+  }
+
+  .alert-card.critical {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--red-primary);
+  }
+
+  .alert-card.warning {
+      background-color: rgba(234, 179, 8, 0.1);
+      color: var(--yellow-primary);
+  }
+
+  .alert-card.info {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--blue-primary);
+  }
+
+  /* Metrics Grid */
+  .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+  }
+
+  .metric-card {
+      padding: 1.5rem;
+  }
+
+  .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+  }
+
+  .metric-info {
+      flex: 1;
+  }
+
+  .metric-title {
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+  }
+
+  .metric-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+  }
+
+  .metric-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+  }
+
+  .metric-icon {
+      padding: 0.5rem;
+      background-color: rgba(59, 130, 246, 0.1);
+      border-radius: 0.5rem;
+      color: var(--blue-primary);
+  }
+
+  .metric-trend {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+  }
+
+  .metric-trend.positive {
+      color: var(--green-primary);
+  }
+
+  .metric-trend.negative {
+      color: var(--red-primary);
+  }
+
+  /* Warehouse Overview */
+  .warehouse-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+  }
+
+  .warehouse-card {
+      background-color: var(--background-input);
+      border-radius: 0.5rem;
+      padding: 1rem;
+  }
+
+  .warehouse-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+  }
+
+  .warehouse-title {
+      color: var(--text-primary);
+  }
+
+  .warehouse-id {
+      color: var(--text-secondary);
+  }
+
+  .warehouse-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  }
+
+  .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+  }
+
+  .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+  }
+
+  .stat-value {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+  }
+
+  .progress-bar {
+      height: 0.5rem;
+      background-color: rgba(75, 85, 99, 0.5);
+      border-radius: 9999px;
+      overflow: hidden;
+  }
+
+  .progress-bar-fill {
+      height: 100%;
+      background-color: var(--blue-primary);
+      border-radius: 9999px;
+      transition: width 0.5s ease;
+  }
+
+  /* Section Titles */
+  .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+  }
+
+  /* Animations */
+  @keyframes pulse {
+      0%, 100% {
+          opacity: 1;
+      }
+      50% {
+          opacity: 0.5;
+      }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1280px) {
+      .warehouse-grid {
+          grid-template-columns: repeat(3, 1fr);
+      }
+  }
+
+  @media (max-width: 1024px) {
+      .stock-overview-grid {
+          grid-template-columns: 1fr;
+      }
+      
+      .metrics-grid {
+          grid-template-columns: 1fr;
+      }
+      
+      .warehouse-grid {
+          grid-template-columns: repeat(2, 1fr);
+      }
+  }
+
+  @media (max-width: 768px) {
+      .main-content {
+          margin-left: 0;
+      }
+      
+      .sidebar {
+          transform: translateX(-100%);
+      }
+      
+      .search-input {
+          width: 100%;
+      }
+      
+      .warehouse-grid {
+          grid-template-columns: 1fr;
+      }
+  }

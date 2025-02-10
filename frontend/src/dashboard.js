@@ -3,7 +3,7 @@ import {
   Search, Bell, LayoutDashboard, Warehouse, Package, FileText, 
   Truck, Settings, HelpCircle, TrendingUp, TrendingDown, AlertCircle 
 } from 'lucide-react';
-
+import './App.css'
 // API Configuration
 const API_ENDPOINTS = {
   INVENTORY_COUNT: '/api/inventory/count',
@@ -14,19 +14,19 @@ const API_ENDPOINTS = {
 
 // Base Card Components
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-[#1E1E1E] rounded-xl border border-gray-800/50 ${className}`}>
+  <div className={`card ${className}`}>
     {children}
   </div>
 );
 
 const CardHeader = ({ children, className = '' }) => (
-  <div className={`p-6 border-b border-gray-800 ${className}`}>
+  <div className={`card-header ${className}`}>
     {children}
   </div>
 );
 
 const CardContent = ({ children, className = '' }) => (
-  <div className={`p-6 ${className}`}>
+  <div className={`card-content ${className}`}>
     {children}
   </div>
 );
@@ -61,12 +61,12 @@ const useDataFetching = (endpoint, interval = 30000) => {
 
 const Dashboard = () => {
   return (
-    <div className="flex min-h-screen bg-[#121212]">
+    <div className="dashboard">
       <Sidebar />
-      <main className="flex-1 ml-64">
-        <div className="p-6">
+      <main className="main-content">
+        <div className="main-container">
           <Header />
-          <div className="space-y-6">
+          <div className="content-grid">
             <StockOverviewGrid />
             <MetricsGrid />
             <WarehouseOverview />
@@ -87,19 +87,16 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="fixed w-64 h-full bg-[#1E1E1E] border-r border-gray-800">
-      <div className="p-6">
-        <h1 className="text-2xl font-bold text-blue-500 mb-8">INVENX</h1>
+    <aside className="sidebar">
+      <div className="sidebar-container">
+        <h1 className="logo">INVENX</h1>
         
-        <nav className="space-y-2">
+        <nav className="nav-menu">
           {menuItems.map((item, index) => (
             <a
               key={index}
               href="#"
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
-                ${item.active 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-gray-400 hover:bg-gray-800'}`}
+              className={`nav-item ${item.active ? 'active' : ''}`}
             >
               <item.icon size={20} />
               <span>{item.text}</span>
@@ -107,12 +104,12 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-6 left-6 right-6 space-y-2">
-          <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 rounded-lg">
+        <div className="bottom-menu">
+          <a href="#" className="nav-item">
             <Settings size={20} />
             <span>Settings</span>
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 rounded-lg">
+          <a href="#" className="nav-item">
             <HelpCircle size={20} />
             <span>Info</span>
           </a>
@@ -124,23 +121,22 @@ const Sidebar = () => {
 
 const Header = () => {
   return (
-    <header className="flex justify-between items-center mb-8">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+    <header className="header">
+      <div className="search-container">
+        <Search className="search-icon" size={20} />
         <input
           type="text"
           placeholder="Search anything..."
-          className="w-96 pl-10 pr-4 py-2 bg-[#2A2A2A] rounded-lg border border-gray-700 text-gray-200 
-            focus:outline-none focus:border-blue-500 transition-all"
+          className="search-input"
         />
       </div>
 
-      <div className="flex items-center gap-4">
-        <button className="relative p-2 text-gray-400 hover:bg-gray-800 rounded-lg">
+      <div className="header-actions">
+        <button className="notification-button">
           <Bell size={20} />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full" />
+          <span className="notification-dot"></span>
         </button>
-        <div className="flex items-center gap-2 px-4 py-2 bg-[#2A2A2A] rounded-lg text-gray-400">
+        <div className="date-display">
           <span>February 10, 2025 at 11:54 PM</span>
         </div>
       </div>
@@ -152,47 +148,38 @@ const StockOverviewGrid = () => {
   const { data: alertsData, loading: alertsLoading } = useDataFetching(API_ENDPOINTS.STOCK_ALERTS);
 
   return (
-    <div className="grid grid-cols-4 gap-6">
-      <Card className="col-span-3">
+    <div className="stock-overview-grid">
+      <Card className="chart-card">
         <CardHeader>
-          <h2 className="text-xl font-semibold text-white">
-            Warehouse Stock Levels by Product
-          </h2>
+          <h2 className="section-title">Warehouse Stock Levels by Product</h2>
         </CardHeader>
-        <CardContent className="h-[480px]">
+        <CardContent className="chart-container">
           <iframe 
-            style={{
-              background: '#21313C',
-              border: 'none',
-              borderRadius: '8px',
-              boxShadow: '0 2px 10px 0 rgba(70, 76, 79, .2)',
-              width: '100%',
-              height: '100%'
-            }}
+            className="chart-frame"
             src="https://charts.mongodb.com/charts-invenx-vtwdbcs/embed/charts?id=50c65100-6dd5-4b9a-b21a-38a9e9f29dcf&maxDataAge=3600&theme=dark&autoRefresh=true"
           />
         </CardContent>
       </Card>
       
-      <Card>
+      <Card className="alerts-card">
         <CardHeader>
-          <h2 className="text-xl font-semibold text-white">Stock Alerts</h2>
+          <h2 className="section-title">Stock Alerts</h2>
         </CardHeader>
         <CardContent>
           {alertsLoading ? (
-            <div className="animate-pulse space-y-4">
+            <div className="loading-skeleton">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-20 bg-gray-800 rounded-lg" />
+                <div key={i} className="skeleton-item" />
               ))}
             </div>
           ) : alertsData?.length ? (
-            <div className="space-y-4">
+            <div className="alerts-container">
               {alertsData.map((alert, index) => (
                 <AlertCard key={index} {...alert} />
               ))}
             </div>
           ) : (
-            <div className="text-gray-400">No current stock alerts</div>
+            <div className="no-alerts">No current stock alerts</div>
           )}
         </CardContent>
       </Card>
@@ -201,19 +188,13 @@ const StockOverviewGrid = () => {
 };
 
 const AlertCard = ({ severity, message, timestamp }) => {
-  const severityStyles = {
-    critical: 'text-red-500 bg-red-500/10',
-    warning: 'text-yellow-500 bg-yellow-500/10',
-    info: 'text-blue-500 bg-blue-500/10'
-  };
-
   return (
-    <div className={`p-4 rounded-lg ${severityStyles[severity]}`}>
-      <div className="flex items-start gap-3">
+    <div className={`alert-card ${severity}`}>
+      <div className="alert-content">
         <AlertCircle size={20} />
-        <div>
-          <p className="font-medium">{message}</p>
-          {timestamp && <p className="text-sm opacity-75 mt-1">{timestamp}</p>}
+        <div className="alert-message">
+          <p>{message}</p>
+          {timestamp && <p className="alert-timestamp">{timestamp}</p>}
         </div>
       </div>
     </div>
@@ -225,7 +206,7 @@ const MetricsGrid = () => {
   const { data: utilizationData, loading: utilizationLoading } = useDataFetching(API_ENDPOINTS.WAREHOUSE_UTILIZATION);
 
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className="metrics-grid">
       <MetricCard
         title="Inventory Count"
         value={inventoryLoading ? 'Loading...' : (inventoryData?.count || 'N/A')}
@@ -246,28 +227,28 @@ const MetricsGrid = () => {
 
 const MetricCard = ({ title, value, subtitle, trend, icon: Icon }) => {
   return (
-    <Card className="p-6 transition-all hover:border-gray-700/50">
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-gray-400 mb-1">{title}</h3>
-          <div className="text-2xl font-semibold text-white">{value}</div>
-          <p className="text-sm text-gray-400 mt-1">{subtitle}</p>
+    <Card className="metric-card">
+      <div className="metric-header">
+        <div className="metric-info">
+          <h3 className="metric-title">{title}</h3>
+          <div className="metric-value">{value}</div>
+          <p className="metric-subtitle">{subtitle}</p>
         </div>
         {Icon && (
-          <div className="p-2 bg-blue-500/10 rounded-lg">
-            <Icon className="text-blue-500" size={24} />
+          <div className="metric-icon">
+            <Icon size={24} />
           </div>
         )}
       </div>
       
       {trend !== undefined && (
-        <div className="mt-4 flex items-center gap-1">
+        <div className={`metric-trend ${trend >= 0 ? 'positive' : 'negative'}`}>
           {trend >= 0 ? (
-            <TrendingUp size={16} className="text-green-500" />
+            <TrendingUp size={16} />
           ) : (
-            <TrendingDown size={16} className="text-red-500" />
+            <TrendingDown size={16} />
           )}
-          <span className={`text-sm ${trend >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+          <span className="trend-value">
             {trend > 0 ? '+' : ''}{trend}%
           </span>
         </div>
@@ -283,10 +264,10 @@ const WarehouseOverview = () => {
   return (
     <Card>
       <CardHeader>
-        <h2 className="text-xl font-semibold text-white">Warehouse Overview</h2>
+        <h2 className="section-title">Warehouse Overview</h2>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-4 gap-6">
+        <div className="warehouse-grid">
           {warehouses.map((warehouse, index) => (
             <WarehouseCard
               key={index}
@@ -304,30 +285,30 @@ const WarehouseOverview = () => {
 
 const WarehouseCard = ({ id, totalStock, capacityUtilization, loading }) => {
   return (
-    <div className="bg-[#2A2A2A] rounded-lg p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-white">Warehouse {id}</h3>
-        <span className="text-gray-400">
+    <div className="warehouse-card">
+      <div className="warehouse-header">
+        <h3 className="warehouse-title">Warehouse {id}</h3>
+        <span className="warehouse-id">
           {loading ? 'N/A' : (totalStock ? `WH${id}` : 'N/A')}
         </span>
       </div>
       
-      <div className="space-y-4">
-        <div>
-          <span className="text-gray-400 text-sm">Total Stock</span>
-          <div className="text-white font-semibold">
+      <div className="warehouse-stats">
+        <div className="stat-item">
+          <span className="stat-label">Total Stock</span>
+          <div className="stat-value">
             {loading ? 'N/A' : (totalStock ? `${totalStock.toLocaleString()} units` : 'N/A units')}
           </div>
         </div>
         
-        <div>
-          <span className="text-gray-400 text-sm">Capacity Utilization</span>
-          <div className="text-white font-semibold mb-2">
+        <div className="stat-item">
+          <span className="stat-label">Capacity Utilization</span>
+          <div className="stat-value">
             {loading ? 'N/A' : (capacityUtilization ? `${capacityUtilization}%` : 'N/A%')}
           </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div className="progress-bar">
             <div
-              className="h-full bg-blue-500 rounded-full transition-all duration-500"
+              className="progress-bar-fill"
               style={{ width: `${loading ? 0 : (capacityUtilization || 0)}%` }}
             />
           </div>
@@ -336,5 +317,7 @@ const WarehouseCard = ({ id, totalStock, capacityUtilization, loading }) => {
     </div>
   );
 };
+
+
 
 export default Dashboard;
