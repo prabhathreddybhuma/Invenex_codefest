@@ -1,0 +1,71 @@
+<div class="warehouse-management-container">
+    <div class="warehouse-analytics-grid">
+        <!-- Warehouse Utilization Graph -->
+        <div class="warehouse-graph-container card">
+            <div class="card-header">
+                <h2>Warehouse Utilization Graph</h2>
+            </div>
+            <div class="card-content">
+                <iframe id="warehouseUtilizationChart" class="graph-iframe"></iframe>
+            </div>
+        </div>
+
+        <!-- Warehouse Overview Stats -->
+        <div class="warehouse-overview-stats card">
+            <div class="card-header">
+                <h2>Warehouse Overview</h2>
+            </div>
+            <div class="card-content">
+                <div class="overview-stats-grid">
+                    <div class="stat-item">
+                        <span>Total Warehouses</span>
+                        <strong id="totalWarehousesCount">N/A</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Available Storage Slots</span>
+                        <strong id="availableStorageSlots">N/A</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Total Warehouses Utilization</span>
+                        <strong id="totalWarehousesUtilization">N/A%</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Individual Warehouse Details -->
+    <div class="individual-warehouse-details card">
+        <div class="card-header">
+            <h2>Individual Warehouse Details</h2>
+        </div>
+        <div class="card-content">
+            <div id="warehouseDetailsGrid" class="warehouse-details-grid">
+                <!-- Dynamically populated warehouse details -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Powered Optimization -->
+    <div class="ai-optimization card">
+        <div class="card-header">
+            <h2>AI-Powered Stock Optimization</h2>
+        </div>
+        <div class="card-content">
+            <div class="optimization-sections">
+                <div class="under-utilized-warehouses">
+                    <h3>Under-Utilized Warehouses</h3>
+                    <div id="underUtilizedWarehousesList"></div>
+                </div>
+                <div class="storage-overload-warnings">
+                    <h3>Storage Overload Warnings</h3>
+                    <div id="storageOverloadWarningsList"></div>
+                </div>
+                <div class="ai-stock-optimization-suggestions">
+                    <h3>AI Stock Optimization Suggestions</h3>
+                    <div id="aiStockOptimizationSuggestionsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
