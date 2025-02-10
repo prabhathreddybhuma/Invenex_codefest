@@ -254,6 +254,52 @@ function startPeriodicRefresh() {
         updateDateTime();
     }, 30000); // Update every 30 seconds
 }
+// Wait for the DOM to be fully loaded
+// Wait until the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+    // Fetch overall total inventory from API endpoint
+    fetch("http://localhost:3000/api/total-inventory")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok for total inventory");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Update the inventory count element with the total inventory
+        const inventoryCountElem = document.getElementById("inventoryCountValue");
+        if (inventoryCountElem) {
+          inventoryCountElem.textContent = data.total_inventory;
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching total inventory:", error);
+      });
+  
+    // Fetch overall warehouse utilization from API endpoint
+    fetch("http://localhost:3000/api/overall-utilization")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok for overall utilization");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Update the warehouse utilization element with the overall utilization percentage
+        const utilizationElem = document.getElementById("warehouseUtilizationValue");
+        if (utilizationElem) {
+          utilizationElem.textContent = data.overall_utilization_percentage;
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching overall utilization:", error);
+      });
+  
+    // (Optional) You can add more fetch calls here for additional API endpoints,
+    // such as fetching inventory alerts, sales charts data, etc.
+  });
+  
+  
 
 // Initialize everything when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
