@@ -213,4 +213,71 @@ app.get("/api/warehouses", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
+  app.get("/api/transfer-rates", async (req, res) => {
+    try {
+      // Access the 'warehouse_transfers' collection
+      const transfersCollection = db.collection("warehouse_transfers");
   
+      // Fetch all transfer rate documents
+      const transferRates = await transfersCollection.find({}).toArray();
+  
+      // Return the transfer rates as a JSON response
+      res.json({ transfer_rates: transferRates });
+    } catch (error) {
+      console.error("Error fetching transfer rates:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  app.get("/api/product-stocks", async (req, res) => {
+    try {
+      const inventoryCollection = db.collection("inventory");
+  
+      // Aggregate total stock per product by grouping on product_id
+      const productStocks = await inventoryCollection.aggregate([
+        {
+          $group: {
+            _id: "$product_id",
+            total_stock: { $sum: "$current_stock" }
+          }
+        }
+      ]).toArray();
+  
+      // Respond with the aggregated data
+      res.json({ product_stocks: productStocks });
+    } catch (error) {
+      console.error("Error fetching product stocks:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
+  app.get("/api/products", async (req, res) => {
+    try {
+      // Access the "products" collection from the connected database.
+      const productsCollection = db.collection("products");
+  
+      // Retrieve all product documents.
+      const products = await productsCollection.find({}).toArray();
+  
+      // Respond with the product details.
+      res.json({ products });
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  app.get("/api/inventory", async (req, res) => {
+    try {
+        // Connect to the database
+        const db = client.db("InvenX");
+        const inventoryCollection = db.collection("inventory");
+
+        // Fetch all inventory records
+        const inventoryData = await inventoryCollection.find({}).toArray();
+
+        // Respond with inventory details
+        res.json({ inventory: inventoryData });
+    } catch (error) {
+        console.error("Error fetching inventory:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});

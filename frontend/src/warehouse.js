@@ -11,7 +11,8 @@ import {
   HelpCircle,
   LayoutDashboard,
   FileText,
-  Truck
+  Truck,
+  ChevronRight
 } from 'lucide-react';
 import {
   LineChart,
@@ -28,7 +29,8 @@ const API_ENDPOINTS = {
   WAREHOUSES: 'http://localhost:3000/api/warehouses',
   WAREHOUSE_UTILIZATION: 'http://localhost:3000/api/warehouse-utilization',
   OVERALL_UTILISATION: 'http://localhost:3000/api/overall-utilization',
-  WAREHOUSE_STOCK: 'http://localhost:3000/api/warehouse-stock'
+  WAREHOUSE_STOCK: 'http://localhost:3000/api/warehouse-stock',
+  TRANSFER_RATES: 'http://localhost:3000/api/transfer-rates'
 };
 
 const useDataFetching = (endpoint, interval = 30000) => {
@@ -59,69 +61,49 @@ const useDataFetching = (endpoint, interval = 30000) => {
 };
 
 const Sidebar = () => {
-  const menuItems = [
-    { 
-      icon: LayoutDashboard, 
-      text: 'Dashboard', 
-      link: '/',
-      active: true 
-    },
-    { 
-      icon: Warehouse, 
-      text: 'Warehouse Management', 
-      link: '/warehouse'
-    },
-    { 
-      icon: Package, 
-      text: 'Inventory', 
-      link: '/inventory'
-    },
-    { 
-      icon: FileText, 
-      text: 'Demand Forecast', 
-      link: '/forecast'
-    },
-    { 
-      icon: Truck, 
-      text: 'Inventory Optimisation', 
-      link: '/optimise'
-    }
-  ];
-
-  return (
-    <aside className="sidebar">
-      <div className="sidebar-container">
-        <h1 className="logo">INVENX</h1>
-        
-        <nav className="nav-menu">
-          {menuItems.map((item, index) => (
-            <a
-              key={index}
-              href={item.link}
-              className={`nav-item ${item.active ? 'active' : ''}`}
-            >
-              <item.icon size={20} />
-              <span>{item.text}</span>
+    const menuItems = [
+      { icon: LayoutDashboard, text: 'Dashboard', link: '/' },
+      { icon: Warehouse, text: 'Warehouse Management', link: '/warehouse', active: true },
+      { icon: Package, text: 'Inventory', link: '/inventory' },
+      { icon: FileText, text: 'Demand Forecast', link: '/forecast' },
+      { icon: Truck, text: 'Inventory Optimisation', link: '/optimisation' }
+    ];
+  
+    return (
+      <aside className="sidebar">
+        <div className="sidebar-container">
+          <h1 className="logo">INVENX</h1>
+          <nav className="nav-menu">
+            {menuItems.map((item, index) => (
+              <a
+                key={index}
+                href={item.link}
+                className={`nav-item ${item.active ? 'active' : ''}`}
+              >
+                <item.icon size={20} />
+                <span>{item.text}</span>
+                <ChevronRight 
+                  size={16} 
+                  className={`arrow-icon ${item.active ? 'visible' : ''}`}
+                />
+              </a>
+            ))}
+          </nav>
+          <div className="bottom-menu">
+            <a href="/settings" className="nav-item">
+              <Settings size={20} />
+              <span>Settings</span>
             </a>
-          ))}
-        </nav>
-
-        <div className="bottom-menu">
-          <a href="/settings" className="nav-item">
-            <Settings size={20} />
-            <span>Settings</span>
-          </a>
-          <a href="/help" className="nav-item">
-            <HelpCircle size={20} />
-            <span>Info</span>
-          </a>
+            <a href="/help" className="nav-item">
+              <HelpCircle size={20} />
+              <span>Help Center</span>
+            </a>
+          </div>
         </div>
-      </div>
-    </aside>
-  );
-};
-
-
+      </aside>
+    );
+  };
+  
 const WarehouseOverview = () => {
   const { data: statsData, loading: statsLoading } = useDataFetching(API_ENDPOINTS.AVAILABLE_STORAGE);
   const { data: utilizationData, loading: utilizationLoading } = useDataFetching(API_ENDPOINTS.OVERALL_UTILISATION);
@@ -214,9 +196,40 @@ const WarehouseDetails = () => {
     );
   };
   const TransferRates = () => {
-   
+    const { data: transferData, loading: transferLoading, error: transferError } = useDataFetching(API_ENDPOINTS.TRANSFER_RATES);
+  
+    if (transferLoading) return <p>Loading transfer rates...</p>;
+    if (transferError) return <p>Error: {transferError.message}</p>;
+  
+    const rates = transferData.transfer_rates;
+  
+    return (
+      <div className="transfer-rates">
+        <h3>Warehouse Transfer Rates</h3>
+        <table className="transfer-table">
+          <thead>
+            <tr>
+           
+              <th>Source Warehouse</th>
+              <th>Destination Warehouse</th>
+              <th>Transfer Cost</th>
+           
+            </tr>
+          </thead>
+          <tbody>
+            {rates.map(rate => (
+              <tr key={rate._id}>
+                <td>{rate.source_warehouse_id}</td>
+                <td>{rate.destination_warehouse_id}</td>
+                <td>{rate.transfer_cost}</td>
+              
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   };
-
 
 const MetricCard = ({ title, value, subtitle, trend, icon: Icon }) => {
   return (

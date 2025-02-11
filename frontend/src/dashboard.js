@@ -11,6 +11,20 @@ const API_ENDPOINTS = {
    WAREHOUSE_UTILISATION: 'http://localhost:3000/api/warehouse-utilization',
    WAREHOUSE_STOCK: 'http://localhost:3000/api/warehouse-stock',
 };
+const SAMPLE_ALERTS = [
+  {
+    severity: 'critical',
+    message: 'MacBook Pro stock below threshold in Warehouse WIND01',
+    timestamp: '10 minutes ago',
+    product_id: 'P10001'
+  },
+  {
+    severity: 'warning',
+    message: 'BassBlast Earbuds approaching low stock in Warehouse WIND03',
+    timestamp: '25 minutes ago',
+    product_id: 'P10002'
+  }
+];
 
 
 // Base Card Components
@@ -167,7 +181,14 @@ const Header = () => {
 };
 
 const StockOverviewGrid = () => {
-  const { data: alertsData, loading: alertsLoading } = useDataFetching(API_ENDPOINTS.STOCK_ALERTS);
+  // Simulate loading state
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate API loading time
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="stock-overview-grid">
@@ -188,15 +209,15 @@ const StockOverviewGrid = () => {
           <h2 className="section-title">Stock Alerts</h2>
         </CardHeader>
         <CardContent>
-          {alertsLoading ? (
+          {loading ? (
             <div className="loading-skeleton">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="skeleton-item" />
               ))}
             </div>
-          ) : alertsData?.length ? (
+          ) : SAMPLE_ALERTS.length ? (
             <div className="alerts-container">
-              {alertsData.map((alert, index) => (
+              {SAMPLE_ALERTS.map((alert, index) => (
                 <AlertCard key={index} {...alert} />
               ))}
             </div>
@@ -209,14 +230,18 @@ const StockOverviewGrid = () => {
   );
 };
 
-const AlertCard = ({ severity, message, timestamp }) => {
+// Modified AlertCard component with enhanced styling
+const AlertCard = ({ severity, message, timestamp, product_id }) => {
   return (
     <div className={`alert-card ${severity}`}>
       <div className="alert-content">
         <AlertCircle size={20} />
         <div className="alert-message">
           <p>{message}</p>
-          {timestamp && <p className="alert-timestamp">{timestamp}</p>}
+          <div className="alert-details">
+            {product_id && <span className="product-id">{product_id}</span>}
+            {timestamp && <span className="alert-timestamp">{timestamp}</span>}
+          </div>
         </div>
       </div>
     </div>
