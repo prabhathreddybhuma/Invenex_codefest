@@ -66,7 +66,7 @@ const Sidebar = () => {
       { icon: Warehouse, text: 'Warehouse Management', link: '/warehouse', active: true },
       { icon: Package, text: 'Inventory', link: '/inventory' },
       { icon: FileText, text: 'Demand Forecast', link: '/forecast' },
-      { icon: Truck, text: 'Inventory Optimisation', link: '/optimisation' }
+      { icon: Truck, text: 'Inventory Optimisation', link: '/optimise' }
     ];
   
     return (
