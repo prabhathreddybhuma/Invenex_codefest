@@ -89,7 +89,7 @@ const DarkDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://775d-34-106-55-165.ngrok-free.app/forecast-all');
+        const response = await fetch('https://demand-forecasting-arima-production.up.railway.app/forecast-all');
         const data = await response.json();
         setForecastData(data.results);
         setLoading(false);
