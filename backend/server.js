@@ -1,13 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient } = require("mongodb");
+require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
 app.use(cors());
 
 // MongoDB Connection URI
-const MONGO_URI = "mongodb+srv://himavarshithreddy:invenx@invenx.kxiph.mongodb.net/?retryWrites=true&w=majority&appName=InvenX";
+const MONGO_URI = process.env.MONGO_URI;
 
 // Create a MongoClient instance with proper options
 const client = new MongoClient(MONGO_URI, {

@@ -25,12 +25,12 @@ import {
 } from 'recharts';
 
 const API_ENDPOINTS = {
-  AVAILABLE_STORAGE: 'http://localhost:3000/api/available-storage',
-  WAREHOUSES: 'http://localhost:3000/api/warehouses',
-  WAREHOUSE_UTILIZATION: 'http://localhost:3000/api/warehouse-utilization',
-  OVERALL_UTILISATION: 'http://localhost:3000/api/overall-utilization',
-  WAREHOUSE_STOCK: 'http://localhost:3000/api/warehouse-stock',
-  TRANSFER_RATES: 'http://localhost:3000/api/transfer-rates'
+  AVAILABLE_STORAGE: 'https://invenexcodefest-production.up.railway.app/api/available-storage',
+  WAREHOUSES: 'https://invenexcodefest-production.up.railway.app/api/warehouses',
+  WAREHOUSE_UTILIZATION: 'https://invenexcodefest-production.up.railway.app/api/warehouse-utilization',
+  OVERALL_UTILISATION: 'https://invenexcodefest-production.up.railway.app/api/overall-utilization',
+  WAREHOUSE_STOCK: 'https://invenexcodefest-production.up.railway.app/api/warehouse-stock',
+  TRANSFER_RATES: 'https://invenexcodefest-production.up.railway.app/api/transfer-rates'
 };
 
 const useDataFetching = (endpoint, interval = 30000) => {

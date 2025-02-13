@@ -131,7 +131,7 @@ const Optimisation = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        'https://d5f7-34-83-161-48.ngrok-free.app/inventory/optimization',
+        'https://inventory-optimisation-pulp-production.up.railway.app/inventory/optimization',
         {
           headers: {
             'ngrok-skip-browser-warning': 'true'

@@ -6,10 +6,10 @@ import {
 import './App.css'
 // API Configuration
 const API_ENDPOINTS = {
-  TOTAL_INVENTORY: 'http://localhost:3000/api/total-inventory',
-  OVERALL_UTILISATION: 'http://localhost:3000/api/overall-utilization',
-   WAREHOUSE_UTILISATION: 'http://localhost:3000/api/warehouse-utilization',
-   WAREHOUSE_STOCK: 'http://localhost:3000/api/warehouse-stock',
+  TOTAL_INVENTORY: 'https://invenexcodefest-production.up.railway.app/api/total-inventory',
+  OVERALL_UTILISATION: 'https://invenexcodefest-production.up.railway.app/api/overall-utilization',
+   WAREHOUSE_UTILISATION: 'https://invenexcodefest-production.up.railway.app/api/warehouse-utilization',
+   WAREHOUSE_STOCK: 'https://invenexcodefest-production.up.railway.app/api/warehouse-stock',
 };
 const SAMPLE_ALERTS = [
   {
