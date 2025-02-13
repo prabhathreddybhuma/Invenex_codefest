@@ -214,8 +214,8 @@ const Inventory = () => {
     const fetchData = async () => {
       try {
         const [productsResponse, stocksResponse] = await Promise.all([
-          fetch('http://localhost:3000/api/products'),
-          fetch('http://localhost:3000/api/product-stocks')
+          fetch('https://invenexcodefest-production.up.railway.app/api/products'),
+          fetch('https://invenexcodefest-production.up.railway.app/api/product-stocks')
         ]);
 
         if (!productsResponse.ok || !stocksResponse.ok) {
